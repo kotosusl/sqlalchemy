@@ -1,6 +1,9 @@
+import datetime
+
 from flask import Flask
 from data import db_session
 from data.users import User
+from data.jobs import Jobs
 
 
 app = Flask(__name__)
@@ -22,10 +25,14 @@ def add_user(surname, name, age, position, speciality, address, email):
 def main():
     db_session.global_init("db/blogs.db")
     session = db_session.create_session()
-    session.add(add_user('Scott', 'Ridley', 21, 'captain', 'research engineer', 'module_1', 'scott_chief@mars.org'))
-    session.add(add_user('Smith', 'Tom', 32, 'Senior', 'researching engineer', 'module_1', 'smith324397@mars.org'))
-    session.add(add_user('Petrov', 'Vasya', 24, 'Middle', 'researching engineer', 'module_0', 'Vasya_top@mars.org'))
-    session.add(add_user('Ivanov', 'Petya', 23, 'Junior', 'researching engineer', 'module_0', 'Vasya_loh@mars.org'))
+    job = Jobs()
+    job.team_leader = 1
+    job.job = 'deployment of residential modules 1 and 2'
+    job.work_size = 15
+    job.collaborators = '2, 3'
+    job.start_date = datetime.datetime.now()
+    job.is_finished = False
+    session.add(job)
     session.commit()
 
 
