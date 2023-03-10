@@ -17,11 +17,11 @@ class User(SqlAlchemyBase):
     email = sqlalchemy.Column(sqlalchemy.String, unique=True)
     hashed_password = sqlalchemy.Column(sqlalchemy.String)
     modified_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.now)
+    department_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('department.id'))
     jobs = orm.relationship('Jobs', back_populates='user')
 
     def __str__(self):
-        word = f'{self.surname} {self.name} {self.age} {self.position} {self.speciality} {self.email} '
-        word += f'{self.hashed_password}'
+        word = f'<Colonist> {self.id} {self.surname} {self.name}'
         return word
 
     def __repr__(self):

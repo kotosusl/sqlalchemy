@@ -18,7 +18,7 @@ class Jobs(SqlAlchemyBase):
     user = orm.relationship('User')
 
     def __str__(self):
-        word = f'{self.team_leader} {self.job} {self.work_size} {self.collaborators} {self.is_finished}'
+        word = f'<Jobs> {self.job}'
         return word
 
     def __repr__(self):

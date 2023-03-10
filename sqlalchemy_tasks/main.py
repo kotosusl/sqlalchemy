@@ -1,6 +1,8 @@
 from flask import Flask
 from data import db_session
 from data.users import User
+from data.jobs import Jobs
+from data.department import Department
 
 
 app = Flask(__name__)
@@ -20,13 +22,17 @@ def add_user(surname, name, age, position, speciality, address, email):
 
 
 def main():
-    db_session.global_init("db/blogs.db")
+    db_session.global_init('db/blogs.db')
     session = db_session.create_session()
-    session.add(add_user('Scott', 'Ridley', 21, 'captain', 'research engineer', 'module_1', 'scott_chief@mars.org'))
-    session.add(add_user('Smith', 'Tom', 32, 'Senior', 'researching engineer', 'module_1', 'smith324397@mars.org'))
-    session.add(add_user('Petrov', 'Vasya', 24, 'Middle', 'researching engineer', 'module_0', 'Vasya_top@mars.org'))
-    session.add(add_user('Ivanov', 'Petya', 23, 'Junior', 'researching engineer', 'module_0', 'Vasya_loh@mars.org'))
-    session.commit()
+    dp = session.query(Department).filter(Department.id == 1).first()
+    users_id = [int(p) for p in dp.members.split(', ')]
+    for u_id in users_id:
+        hours = 0
+        for i in session.query(Jobs).all():
+            if str(u_id) in i.collaborators or u_id == i.team_leader:
+                hours += i.work_size
+        if hours > 10:
+            print(' '.join(session.query(User.surname, User.name).filter(User.id == u_id).first()))
 
 
 if __name__ == '__main__':
